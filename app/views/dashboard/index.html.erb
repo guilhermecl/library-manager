@@ -1,0 +1,75 @@
+<% content_for :title, "Dashboard" %>
+
+<div class="container mt-4">
+  <h1>Dashboard</h1>
+
+  <% if current_user.librarian? %>
+    <div class="row mb-4">
+      <div class="col-md-3">
+        <div class="card text-bg-light mb-3">
+          <div class="card-body text-center">
+            <h5>Total Books</h5>
+            <p class="display-6"><%= @total_books %></p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card text-bg-light mb-3">
+          <div class="card-body text-center">
+            <h5>Borrowed Books</h5>
+            <p class="display-6"><%= @total_borrowed %></p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card text-bg-warning mb-3">
+          <div class="card-body text-center">
+            <h5>Due Today</h5>
+            <p class="display-6"><%= @due_today.count %></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h4>Members with Overdue Books</h4>
+    <ul class="list-group mb-4">
+      <% @overdue_members.each do |member| %>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <%= member.email %>
+          <%= link_to "View", user_path(member), class: "btn btn-sm btn-outline-primary" if Rails.application.routes.url_helpers.respond_to?(:user_path) %>
+        </li>
+      <% end %>
+    </ul>
+
+  <% else %>
+    <h4>Your Borrowed Books</h4>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Borrowed On</th>
+          <th>Due At</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @my_borrowings.each do |b| %>
+          <tr>
+            <td><%= b.book.title %></td>
+            <td><%= b.borrowed_at.strftime("%Y-%m-%d") %></td>
+            <td><%= b.due_at.strftime("%Y-%m-%d") %></td>
+            <td>
+              <% if b.returned_at %>
+                <span class="badge text-bg-success">Returned</span>
+              <% elsif b.due_at < Time.zone.today %>
+                <span class="badge text-bg-danger">Overdue</span>
+              <% else %>
+                <span class="badge text-bg-warning">Borrowed</span>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+</div>

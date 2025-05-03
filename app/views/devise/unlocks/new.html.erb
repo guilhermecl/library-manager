@@ -1,0 +1,28 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow-sm">
+        <div class="card-header text-center">
+          <h2 class="mb-0">Resend unlock instructions</h2>
+        </div>
+        <div class="card-body">
+          <%= form_for(resource, as: resource_name, url: unlock_path(resource_name), html: { method: :post }) do |f| %>
+            <%= render "devise/shared/error_messages", resource: resource %>
+
+            <div class="mb-3">
+              <%= f.label :email, class: "form-label" %>
+              <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control" %>
+            </div>
+
+            <div class="d-grid">
+              <%= f.submit "Resend unlock instructions", class: "btn btn-primary" %>
+            </div>
+          <% end %>
+        </div>
+        <div class="card-footer text-center">
+          <%= render "devise/shared/links" %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

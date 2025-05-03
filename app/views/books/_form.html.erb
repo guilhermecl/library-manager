@@ -1,0 +1,43 @@
+<%= form_with(model: book, html: { class: "needs-validation" }) do |form| %>
+  <% if book.errors.any? %>
+    <div class="alert alert-danger">
+      <h5 class="mb-2">
+        <%= pluralize(book.errors.count, "error") %> prohibited this book from being saved:
+      </h5>
+      <ul class="mb-0">
+        <% book.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= form.label :title, class: "form-label" %>
+    <%= form.text_field :title, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :author, class: "form-label" %>
+    <%= form.text_field :author, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :genre, class: "form-label" %>
+    <%= form.text_field :genre, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :isbn, class: "form-label" %>
+    <%= form.text_field :isbn, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :total_copies, class: "form-label" %>
+    <%= form.number_field :total_copies, class: "form-control" %>
+  </div>
+
+  <div class="text-end">
+    <%= form.submit class: "btn btn-primary" %>
+  </div>
+<% end %>

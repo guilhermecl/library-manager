@@ -1,0 +1,69 @@
+<% content_for :title, "Books" %>
+
+<div class="container mt-4">
+  <h1 class="mb-4">Books</h1>
+
+  <%= link_to "New Book", new_book_path, class: "btn btn-success mb-4" %>
+
+  <!-- Turbo-powered Filter -->
+  <%= form_with url: books_path, method: :get, data: { turbo_frame: "books_frame" }, class: "row g-2 align-items-end mb-4" do |f| %>
+    <div class="col-md-4">
+      <%= f.label :title, class: "form-label" %>
+      <%= f.text_field :title, value: params[:title], class: "form-control" %>
+    </div>
+    <div class="col-md-4">
+      <%= f.label :author, class: "form-label" %>
+      <%= f.text_field :author, value: params[:author], class: "form-control" %>
+    </div>
+    <div class="col-md-4">
+      <%= f.label :genre, class: "form-label" %>
+      <%= f.text_field :genre, value: params[:genre], class: "form-control" %>
+    </div>
+    <div class="col-md-12 mt-2">
+      <%= f.submit "Filter", class: "btn btn-primary" %>
+      <%= link_to "Clear", books_path, class: "btn btn-outline-secondary ms-2" %>
+    </div>
+  <% end %>
+
+  <!-- Turbo Frame for filtering -->
+  <turbo-frame id="books_frame">
+    <table class="table table-striped table-hover mt-4">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Author</th>
+          <th>Genre</th>
+          <th>ISBN</th>
+          <th>Total Copies</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @books.each do |book| %>
+          <tr>
+            <td><%= book.title %></td>
+            <td><%= book.author %></td>
+            <td><%= book.genre %></td>
+            <td><%= book.isbn %></td>
+            <td><%= book.total_copies %></td>
+            <td>
+              <div class="d-flex flex-wrap gap-2">
+                <%= link_to "Show", book, class: "btn btn-sm btn-outline-primary me-1" %>
+                <%= link_to "Edit", edit_book_path(book), class: "btn btn-sm btn-outline-secondary me-1" %>
+                <%= link_to "Delete", book, method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-sm btn-outline-danger" %>
+                <% if book.available_for_borrow? && !current_user.borrowings.exists?(book: book, returned_at: nil) %>
+                  <%= button_to "Borrow", book_borrow_path(book), method: :post, class: "btn btn-sm btn-success" %>
+                <% end %>
+              </div>
+              <% if current_user.librarian? && book.borrowings.where(returned_at: nil).any? %>
+                <% book.borrowings.where(returned_at: nil).each do |borrowing| %>
+                  <%= button_to "Mark Returned: #{borrowing.user.email}", return_borrowing_path(borrowing), method: :patch, class: "btn btn-sm btn-warning mt-1" %>
+                <% end %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </turbo-frame>
+</div>

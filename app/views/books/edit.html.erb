@@ -1,0 +1,20 @@
+<% content_for :title, "Edit Book" %>
+
+<div class="container mt-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow-sm">
+        <div class="card-header text-center">
+          <h2 class="mb-0">Edit Book</h2>
+        </div>
+        <div class="card-body">
+          <%= render "form", book: @book %>
+        </div>
+        <div class="card-footer d-flex justify-content-between">
+          <%= link_to "Show This Book", @book, class: "btn btn-outline-primary" %>
+          <%= link_to "Back to Books", books_path, class: "btn btn-outline-secondary" %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
