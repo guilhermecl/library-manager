@@ -77,6 +77,15 @@ Includes:
 - Request specs (books, borrowings, dashboards)
 - View and system specs
 
+## 🧠 Thought Process
+
+This application was built with simplicity, maintainability, and clarity in mind:
+
+- **MVC Separation**: The logic for filtering, borrowing, and returning is isolated in the models and controllers, keeping views clean and maintainable.
+- **Role-based Behavior**: Dashboards and permissions are scoped by user roles (`librarian`, `member`) using Devise and simple `if` logic in controllers and views.
+- **Turbo and Bootstrap**: Turbo Frames allow partial updates (like filters) without full page reloads, while Bootstrap offers a fast, responsive UI with minimal custom CSS.
+- **Testing First**: RSpec, FactoryBot, and Shoulda Matchers are used extensively to enforce correctness through model, request, and view/system specs.
+
 ---
 
 ## 📄 License
